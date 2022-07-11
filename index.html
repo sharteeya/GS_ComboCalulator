@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gang Start Combo 計算機</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link href="css/grid.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1">Gang Start Combo 計算機</span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row mt-3 mb-3">
+            <div class="col-12 col-md-6 left-bar mb-4">
+              <h4>選擇模式</h4>
+                <div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onclick="changeMode(0)" checked>
+                    <label class="btn btn-outline-primary" for="btnradio1">模擬模式</label>
+                
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="changeMode(100)">
+                    <label class="btn btn-outline-primary" for="btnradio2">編輯模式</label>
+                </div>
+              <h4>編輯面板</h4>
+                <div class="edit-wrapper mb-4">
+                    <div class="edit-grid" id="edit-sword" onclick="changeEdit(400)">
+                        <img src="img/command-sword.png" class="img-fluid cmd-unselec">
+                    </div>
+                    <div class="edit-grid cmd-unselect" id="edit-arch" onclick="changeEdit(300)">
+                        <img src="img/command-arch.png" class="img-fluid cmd-unselec">
+                    </div>
+                    <div class="edit-grid cmd-unselect" id="edit-magic" onclick="changeEdit(200)">
+                        <img src="img/command-magic.png" class="img-fluid">
+                    </div>
+                    <div class="edit-grid cmd-unselect" id="edit-heal" onclick="changeEdit(100)">
+                        <img src="img/command-heal.png" class="img-fluid">
+                    </div>
+                    <div class="edit-grid cmd-unselect" id="edit-invalid" onclick="changeEdit(-100)">
+                        <img src="img/command-invalid.png" class="img-fluid">
+                    </div>
+                    <div class="edit-grid cmd-unselect" id="edit-stone" onclick="changeEdit(-200)">
+                        <img src="img/command-stone.png" class="img-fluid">
+                    </div>
+                </div>
+                <button class="btn btn-lg btn-success" onclick="calculateCombo()">開始計算</button>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">總移動格數</span>
+                    <input type="text" class="form-control" id="stepCount" readonly>
+                </div>
+                <div class="pane-wrapper" id="pane">Loading</div>
+            </div>
+        </div>
+        <hr>
+        <h4>統計數值</h4>
+        <div class="input-group mb-3">
+            <span class="input-group-text">總 Combo 數</span>
+            <input type="text" class="form-control" id="comboCount" readonly>
+        </div>
+        <div id="dropResult"></div>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</body>
+</html>
