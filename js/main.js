@@ -323,7 +323,7 @@ const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
         totalCombo += combo;
         currentPane = paneTidy(currentPane);
         if (combo > 0) {
-            let newPane = `<h4>STEP ${step}</h4><div class="pane-wrapper">`;
+            let newPane = `<h4>【STEP ${step}】→ ${combo} Combo</h4><div class="pane-wrapper">`;
             Array(5).fill(0).forEach((_, row) => {
                 Array(6).fill(0).forEach((__, col) => {
                     let path = '';
