@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const COMMAND_TYPE = {
     SWORD: 400,
     ARCH: 300,
@@ -34,11 +35,7 @@ const editInvalid = document.getElementById('edit-invalid');
 const editStone = document.getElementById('edit-stone');
 const comboCount = document.getElementById('comboCount');
 const dropResult = document.getElementById('dropResult');
-
-const editBtns = [
-    editSword, editArch, editMagic, editHeal,
-    editInvalid, editStone,
-];
+const editBtns = [editSword, editArch, editMagic, editHeal, editInvalid, editStone];
 
 const pane = new Array(5).fill(0).map(() => new Array(6).fill(0));
 const searchPane = new Array(5).fill(0).map(() => new Array(6).fill(0));
