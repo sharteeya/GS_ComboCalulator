@@ -248,6 +248,9 @@ const paneTidy = (currentPane) => {
             currentPane[1][col], currentPane[0][col],
         ];
         colsCmd = colsCmd.filter((cmd) => cmd !== COMMAND_TYPE.EMPTY);
+        while (colsCmd.length > 0 && colsCmd[0] === COMMAND_TYPE.STONE) {
+            colsCmd.shift();
+        }
         if (colsCmd.length < 5) {
             colsCmd = colsCmd.concat(Array(5 - colsCmd.length).fill(0));
         }
