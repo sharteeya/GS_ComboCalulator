@@ -130,6 +130,8 @@ const refreshSearchPane = () => {
         rows.forEach((value, col) => {
             if (value === COMMAND_TYPE.STONE) {
                 searchPane[row][col] = SEARCH_TYPE.UNSELECTABLE;
+            } else {
+                searchPane[row][col] = SEARCH_TYPE.EMPTY;
             }
         });
     });
@@ -163,10 +165,8 @@ const updateSearchPane = (row, col) => {
                         pane[rowIdx][colIdx] = COMMAND_TYPE.MAGIC;
                         break;
                     case COMMAND_TYPE.STONE:
-                        break;
                     case COMMAND_TYPE.POISON:
                     case COMMAND_TYPE.INVALID:
-                        break;
                     default:
                         break;
                     }
@@ -197,12 +197,11 @@ const clickCommand = (gridRow, gridCol) => {
             pane[gridRow][gridCol] = COMMAND_TYPE.MAGIC;
             updateSearchPane(gridRow, gridCol);
             break;
-        case COMMAND_TYPE.STONE:
-            break;
         case COMMAND_TYPE.POISON:
         case COMMAND_TYPE.INVALID:
             updateSearchPane(gridRow, gridCol);
             break;
+        case COMMAND_TYPE.STONE:
         default:
             break;
         }
@@ -216,10 +215,7 @@ const clickCommand = (gridRow, gridCol) => {
 
 const paneTidy = (currentPane) => {
     for (let col = 0; col <= 5; col += 1) {
-        let colsCmd = [
-            currentPane[4][col], currentPane[3][col], currentPane[2][col],
-            currentPane[1][col], currentPane[0][col],
-        ];
+        let colsCmd = [currentPane[4][col], currentPane[3][col], currentPane[2][col], currentPane[1][col], currentPane[0][col]];
         colsCmd = colsCmd.filter((cmd) => cmd !== COMMAND_TYPE.EMPTY);
         while (colsCmd.length > 0 && colsCmd[0] === COMMAND_TYPE.STONE) {
             colsCmd.shift();
@@ -358,12 +354,15 @@ const findCombo = (inputPane) => {
 };
 
 const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
-    let totalCombo = 0; let combo; let
-        step = 1; let currentPane = inputPane.map((r) => r.slice());
-    dropResult.innerHTML = '';
+    let totalCombo = 0; let
+        combo; let
+        step = 1; let
+        currentPane = inputPane.map((r) => r.slice());
     const commandCount = {
         sword: 0, arch: 0, magic: 0, heal: 0,
     };
+
+    dropResult.innerHTML = '';
     do {
         const result = findCombo(currentPane);
         combo = result.combo;
@@ -392,6 +391,7 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
             step += 1;
         }
     } while (combo > 0);
+
     comboCount.value = totalCombo;
     swordCount.value = commandCount.sword;
     archCount.value = commandCount.arch;
@@ -410,7 +410,6 @@ const init = () => {
     magicCount.value = '尚未計算';
     healCount.value = '尚未計算';
     stepCount.value = '';
-    // calculateCombo();
 };
 
 init();
