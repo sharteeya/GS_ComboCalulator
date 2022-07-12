@@ -106,7 +106,7 @@ const refreshPaneImage = () => {
                 path = './img/command-stone.png';
                 break;
             default:
-                path = './img/command-invalid.png';
+                path = './img/command-empty.png';
             }
             newPane += `<div class="pane-grid
                             ${searchPane[row][col] > SEARCH_TYPE.START ? 'pane-grid-onselect' : ''}
@@ -344,7 +344,7 @@ const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
                         path = './img/command-stone.png';
                         break;
                     default:
-                        path = './img/command-invalid.png';
+                        path = './img/command-empty.png';
                     }
                     newPane += `<div class="pane-grid">
                                     <img src="${path}" class="img-fluid">
