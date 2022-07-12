@@ -102,6 +102,9 @@ const refreshPaneImage = () => {
             case COMMAND_TYPE.HEAL:
                 path = './img/command-heal.png';
                 break;
+            case COMMAND_TYPE.INVALID:
+                path = './img/command-invalid.png';
+                break;
             case COMMAND_TYPE.STONE:
                 path = './img/command-stone.png';
                 break;
@@ -288,26 +291,76 @@ const paneTidy = (currentPane) => {
     return currentPane;
 };
 
-const findCombo = (currentPane) => {
+const findSameCommand = (row, col, inputPane) => {
+    const currentPane = inputPane.map((r) => r.slice());
+    const processing = [{ row, col }];
+    const tobeRemoved = [];
+    const targetCommand = currentPane[row][col];
+    let count = 0; let
+        invalidCount = 0;
+    while (processing.length > 0) {
+        const target = processing.shift();
+        const currentRow = target.row; const
+            currentCol = target.col;
+        if (currentRow > 0) {
+            if (currentPane[currentRow - 1][currentCol] === targetCommand) {
+                processing.push({ row: currentRow - 1, col: currentCol });
+                count += 1;
+            } else if (currentPane[currentRow - 1][currentCol] === COMMAND_TYPE.INVALID) {
+                tobeRemoved.push({ row: currentRow - 1, col: currentCol });
+                invalidCount += 1;
+            }
+        }
+        if (currentRow < 4) {
+            if (currentPane[currentRow + 1][currentCol] === targetCommand) {
+                processing.push({ row: currentRow + 1, col: currentCol });
+                count += 1;
+            } else if (currentPane[currentRow + 1][currentCol] === COMMAND_TYPE.INVALID) {
+                tobeRemoved.push({ row: currentRow + 1, col: currentCol });
+                invalidCount += 1;
+            }
+        }
+        if (currentCol > 0) {
+            if (currentPane[currentRow][currentCol - 1] === targetCommand) {
+                processing.push({ row: currentRow, col: currentCol - 1 });
+                count += 1;
+            } else if (currentPane[currentRow][currentCol - 1] === COMMAND_TYPE.INVALID) {
+                tobeRemoved.push({ row: currentRow, col: currentCol - 1 });
+                invalidCount += 1;
+            }
+        }
+        if (currentCol < 5) {
+            if (currentPane[currentRow][currentCol + 1] === targetCommand) {
+                processing.push({ row: currentRow, col: currentCol + 1 });
+                count += 1;
+            } else if (currentPane[currentRow][currentCol + 1] === COMMAND_TYPE.INVALID) {
+                tobeRemoved.push({ row: currentRow, col: currentCol + 1 });
+                invalidCount += 1;
+            }
+        }
+        tobeRemoved.push({ row: currentRow, col: currentCol });
+        currentPane[currentRow][currentCol] = COMMAND_TYPE.EMPTY;
+    }
+    return {
+        targetCommand,
+        count,
+        invalidCount,
+        tobeRemoved,
+    };
+};
+
+const findCombo = (inputPane) => {
+    const currentPane = inputPane.map((r) => r.slice());
     let combo = 0;
     for (let row = 0; row <= 4; row += 1) {
         for (let col = 0; col <= 4; col += 1) {
             if (currentPane[row][col] === currentPane[row][col + 1]
                 && currentPane[row][col] === currentPane[row][col + 2]
                 && currentPane[row][col] > COMMAND_TYPE.EMPTY) {
-                const matchRow = searchSameCommand(row, col, 'row', currentPane);
-                const matchCol = [];
-                matchRow.forEach((pos) => {
-                    const result = searchSameCommand(pos[0], pos[1], 'col', currentPane);
-                    result.forEach((r) => {
-                        matchCol.push(r);
-                    });
-                });
-                matchRow.forEach((pos) => {
-                    currentPane[pos[0]][pos[1]] = COMMAND_TYPE.EMPTY;
-                });
-                matchCol.forEach((pos) => {
-                    currentPane[pos[0]][pos[1]] = COMMAND_TYPE.EMPTY;
+                const result = findSameCommand(row, col, currentPane);
+                const { tobeRemoved } = result;
+                tobeRemoved.forEach((pos) => {
+                    currentPane[pos.row][pos.col] = COMMAND_TYPE.EMPTY;
                 });
                 combo += 1;
             }
@@ -318,36 +371,27 @@ const findCombo = (currentPane) => {
             if (currentPane[row][col] === currentPane[row + 1][col]
                 && currentPane[row][col] === currentPane[row + 2][col]
                 && currentPane[row][col] > COMMAND_TYPE.EMPTY) {
-                const matchCol = searchSameCommand(row, col, 'col', currentPane);
-                const matchRow = [];
-
-                matchCol.forEach((pos) => {
-                    const result = searchSameCommand(pos[0], pos[1], 'row', currentPane);
-                    result.forEach((r) => {
-                        matchRow.push(r);
-                    });
-                });
-                matchRow.forEach((pos) => {
-                    currentPane[pos[0]][pos[1]] = COMMAND_TYPE.EMPTY;
-                });
-                matchCol.forEach((pos) => {
-                    currentPane[pos[0]][pos[1]] = COMMAND_TYPE.EMPTY;
+                const result = findSameCommand(row, col, currentPane);
+                const { tobeRemoved } = result;
+                tobeRemoved.forEach((pos) => {
+                    currentPane[pos.row][pos.col] = COMMAND_TYPE.EMPTY;
                 });
                 combo += 1;
             }
         }
     }
-
-    return combo;
+    return { combo, currentPane };
 };
 
-const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
+const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
     let totalCombo = 0; let combo; let
-        step = 1;
+        step = 1; let currentPane = inputPane.map((r) => r.slice());
     dropResult.innerHTML = '';
     do {
-        combo = findCombo(currentPane);
+        const result = findCombo(currentPane);
+        combo = result.combo;
         totalCombo += combo;
+        currentPane = result.currentPane;
         currentPane = paneTidy(currentPane);
         if (combo > 0) {
             let newPane = `
@@ -370,6 +414,9 @@ const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
                         break;
                     case COMMAND_TYPE.HEAL:
                         path = './img/command-heal.png';
+                        break;
+                    case COMMAND_TYPE.INVALID:
+                        path = './img/command-invalid.png';
                         break;
                     case COMMAND_TYPE.STONE:
                         path = './img/command-stone.png';
