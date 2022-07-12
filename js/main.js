@@ -213,65 +213,6 @@ const clickCommand = (gridRow, gridCol) => {
     }
 };
 
-const searchSameCommand = (row, col, mode, currentPane) => {
-    const matches = [[row, col]];
-    let currentRow = row; let
-        currentCol = col;
-    if (mode === 'row') {
-        while (currentCol > 0) {
-            if (currentPane[row][currentCol] === currentPane[row][currentCol - 1]) {
-                matches.push([row, currentCol - 1]);
-            } else {
-                break;
-            }
-            currentCol -= 1;
-        }
-        currentCol = col;
-        while (currentCol < 5) {
-            if (currentPane[row][currentCol] === currentPane[row][currentCol + 1]) {
-                matches.push([row, currentCol + 1]);
-            } else {
-                break;
-            }
-            currentCol += 1;
-        }
-    } else {
-        while (currentRow > 0) {
-            if (currentPane[currentRow][col] === currentPane[currentRow - 1][col]) {
-                matches.push([currentRow - 1, col]);
-            } else {
-                break;
-            }
-            currentRow -= 1;
-        }
-        currentRow = row;
-        while (currentRow < 4) {
-            if (currentPane[currentRow][col] === currentPane[currentRow + 1][col]) {
-                matches.push([currentRow + 1, col]);
-            } else {
-                break;
-            }
-            currentRow += 1;
-        }
-    }
-    const invalids = [];
-    matches.forEach((pos) => {
-        if (pos[0] > 0 && currentPane[pos[0] - 1][pos[1]] === COMMAND_TYPE.INVALID) {
-            invalids.push([pos[0] - 1, pos[1]]);
-        }
-        if (pos[0] < 4 && currentPane[pos[0] + 1][pos[1]] === COMMAND_TYPE.INVALID) {
-            invalids.push([pos[0] + 1, pos[1]]);
-        }
-        if (pos[1] > 0 && currentPane[pos[0]][pos[1] - 1] === COMMAND_TYPE.INVALID) {
-            invalids.push([pos[0], pos[1] - 1]);
-        }
-        if (pos[1] < 5 && currentPane[pos[0]][pos[1] + 1] === COMMAND_TYPE.INVALID) {
-            invalids.push([pos[0], pos[1] + 1]);
-        }
-    });
-    return matches.concat(invalids);
-};
-
 const paneTidy = (currentPane) => {
     for (let col = 0; col <= 5; col += 1) {
         let colsCmd = [
