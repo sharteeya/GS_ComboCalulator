@@ -323,7 +323,11 @@ const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
         totalCombo += combo;
         currentPane = paneTidy(currentPane);
         if (combo > 0) {
-            let newPane = `<h4>【STEP ${step}】→ ${combo} Combo</h4><div class="pane-wrapper">`;
+            let newPane = `
+            <h4>【STEP ${step}】→ ${combo} Combo</h4>
+            <p> 消除後的版面如下</p>
+            <div class="pane-wrapper">
+            `;
             for (let row = 0; row < 5; row += 1) {
                 for (let col = 0; col < 6; col += 1) {
                     let path = '';
