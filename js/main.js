@@ -35,6 +35,10 @@ const editHeal = document.getElementById('edit-heal');
 const editInvalid = document.getElementById('edit-invalid');
 const editStone = document.getElementById('edit-stone');
 const comboCount = document.getElementById('comboCount');
+const swordCount = document.getElementById('swordCount');
+const archCount = document.getElementById('archCount');
+const magicCount = document.getElementById('magicCount');
+const healCount = document.getElementById('healCount');
 const dropResult = document.getElementById('dropResult');
 const editBtns = [editSword, editArch, editMagic, editHeal, editInvalid, editStone];
 
@@ -293,8 +297,6 @@ const findSameCommand = (row, col, inputPane) => {
     const processing = [{ row, col }];
     const tobeRemoved = [];
     const targetCommand = currentPane[row][col];
-    let count = 0; let
-        invalidCount = 0;
     while (processing.length > 0) {
         const target = processing.shift();
         const currentRow = target.row; const
@@ -302,37 +304,29 @@ const findSameCommand = (row, col, inputPane) => {
         if (currentRow > 0) {
             if (currentPane[currentRow - 1][currentCol] === targetCommand) {
                 processing.push({ row: currentRow - 1, col: currentCol });
-                count += 1;
             } else if (currentPane[currentRow - 1][currentCol] === COMMAND_TYPE.INVALID) {
                 tobeRemoved.push({ row: currentRow - 1, col: currentCol });
-                invalidCount += 1;
             }
         }
         if (currentRow < 4) {
             if (currentPane[currentRow + 1][currentCol] === targetCommand) {
                 processing.push({ row: currentRow + 1, col: currentCol });
-                count += 1;
             } else if (currentPane[currentRow + 1][currentCol] === COMMAND_TYPE.INVALID) {
                 tobeRemoved.push({ row: currentRow + 1, col: currentCol });
-                invalidCount += 1;
             }
         }
         if (currentCol > 0) {
             if (currentPane[currentRow][currentCol - 1] === targetCommand) {
                 processing.push({ row: currentRow, col: currentCol - 1 });
-                count += 1;
             } else if (currentPane[currentRow][currentCol - 1] === COMMAND_TYPE.INVALID) {
                 tobeRemoved.push({ row: currentRow, col: currentCol - 1 });
-                invalidCount += 1;
             }
         }
         if (currentCol < 5) {
             if (currentPane[currentRow][currentCol + 1] === targetCommand) {
                 processing.push({ row: currentRow, col: currentCol + 1 });
-                count += 1;
             } else if (currentPane[currentRow][currentCol + 1] === COMMAND_TYPE.INVALID) {
                 tobeRemoved.push({ row: currentRow, col: currentCol + 1 });
-                invalidCount += 1;
             }
         }
         tobeRemoved.push({ row: currentRow, col: currentCol });
@@ -340,14 +334,15 @@ const findSameCommand = (row, col, inputPane) => {
     }
     return {
         targetCommand,
-        count,
-        invalidCount,
         tobeRemoved,
     };
 };
 
 const findCombo = (inputPane) => {
-    const currentPane = inputPane.map((r) => r.slice());
+    const currentPane = inputPane.map((r) => r.slice()); const
+        commandCount = {
+            sword: 0, arch: 0, magic: 0, heal: 0,
+        };
     let combo = 0;
     for (let row = 0; row <= 4; row += 1) {
         for (let col = 0; col <= 4; col += 1) {
@@ -355,10 +350,30 @@ const findCombo = (inputPane) => {
                 && currentPane[row][col] === currentPane[row][col + 2]
                 && currentPane[row][col] > COMMAND_TYPE.EMPTY) {
                 const result = findSameCommand(row, col, currentPane);
-                const { tobeRemoved } = result;
-                tobeRemoved.forEach((pos) => {
+                let count = 0;
+                result.tobeRemoved.forEach((pos) => {
+                    if (currentPane[pos.row][pos.col] === result.targetCommand) {
+                        count += 1;
+                    }
                     currentPane[pos.row][pos.col] = COMMAND_TYPE.EMPTY;
                 });
+                switch (result.targetCommand) {
+                case COMMAND_TYPE.SWORD:
+                    commandCount.sword += count;
+                    break;
+                case COMMAND_TYPE.ARCH:
+                    commandCount.arch += count;
+                    break;
+                case COMMAND_TYPE.MAGIC:
+                    commandCount.magic += count;
+                    break;
+                case COMMAND_TYPE.HEAL:
+                    commandCount.heal += count;
+                    break;
+                default:
+                    // eslint-disable-next-line no-console
+                    console.error('Error occur');
+                }
                 combo += 1;
             }
         }
@@ -369,24 +384,50 @@ const findCombo = (inputPane) => {
                 && currentPane[row][col] === currentPane[row + 2][col]
                 && currentPane[row][col] > COMMAND_TYPE.EMPTY) {
                 const result = findSameCommand(row, col, currentPane);
-                const { tobeRemoved } = result;
-                tobeRemoved.forEach((pos) => {
+                let count = 0;
+                result.tobeRemoved.forEach((pos) => {
+                    if (currentPane[pos.row][pos.col] === result.targetCommand) {
+                        count += 1;
+                    }
                     currentPane[pos.row][pos.col] = COMMAND_TYPE.EMPTY;
                 });
+                switch (result.targetCommand) {
+                case COMMAND_TYPE.SWORD:
+                    commandCount.sword += count;
+                    break;
+                case COMMAND_TYPE.ARCH:
+                    commandCount.arch += count;
+                    break;
+                case COMMAND_TYPE.MAGIC:
+                    commandCount.magic += count;
+                    break;
+                case COMMAND_TYPE.HEAL:
+                    commandCount.heal += count;
+                    break;
+                default:
+                    // eslint-disable-next-line no-console
+                    console.error('Error occur');
+                }
                 combo += 1;
             }
         }
     }
-    return { combo, currentPane };
+    return { combo, currentPane, commandCount };
 };
 
 const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
     let totalCombo = 0; let combo; let
         step = 1; let currentPane = inputPane.map((r) => r.slice());
     dropResult.innerHTML = '';
+    const commandCount = {
+        sword: 0, arch: 0, magic: 0, heal: 0,
+    };
     do {
         const result = findCombo(currentPane);
         combo = result.combo;
+        Object.keys(result.commandCount).forEach((key) => {
+            commandCount[key] += result.commandCount[key];
+        });
         totalCombo += combo;
         currentPane = result.currentPane;
         currentPane = paneTidy(currentPane);
@@ -410,6 +451,10 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
         }
     } while (combo > 0);
     comboCount.value = totalCombo;
+    swordCount.value = commandCount.sword;
+    archCount.value = commandCount.arch;
+    magicCount.value = commandCount.magic;
+    healCount.value = commandCount.heal;
 };
 
 const init = () => {
@@ -417,7 +462,11 @@ const init = () => {
     refreshPaneImage();
     refreshSearchPane();
     dropResult.innerHTML = '';
-    comboCount.value = '';
+    comboCount.value = '尚未計算';
+    swordCount.value = '尚未計算';
+    archCount.value = '尚未計算';
+    magicCount.value = '尚未計算';
+    healCount.value = '尚未計算';
     // calculateCombo();
 };
 
