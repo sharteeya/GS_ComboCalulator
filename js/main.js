@@ -75,9 +75,11 @@ const changeEdit = (editCmd) => {
 };
 
 const refreshPane = () => {
+    searchStatus = 0;
     Array(5).fill(0).forEach((_, row) => {
         Array(6).fill(0).forEach((__, col) => {
             pane[row][col] = (Math.floor(Math.random() * 4) + 1) * 100;
+            searchPane[row][col] = SEARCH_TYPE.EMPTY;
         });
     });
 };
@@ -141,8 +143,32 @@ const updateSearchPane = (row, col) => {
                     searchPane[rowIdx][colIdx] = SEARCH_TYPE.EMPTY;
                     calcelCount += 1;
                 }
+                if (value > calcelNumber) {
+                    switch (pane[rowIdx][colIdx]) {
+                    case COMMAND_TYPE.SWORD:
+                        pane[rowIdx][colIdx] = COMMAND_TYPE.ARCH;
+                        break;
+                    case COMMAND_TYPE.ARCH:
+                        pane[rowIdx][colIdx] = COMMAND_TYPE.SWORD;
+                        break;
+                    case COMMAND_TYPE.MAGIC:
+                        pane[rowIdx][colIdx] = COMMAND_TYPE.HEAL;
+                        break;
+                    case COMMAND_TYPE.HEAL:
+                        pane[rowIdx][colIdx] = COMMAND_TYPE.MAGIC;
+                        break;
+                    case COMMAND_TYPE.STONE:
+                        break;
+                    case COMMAND_TYPE.POISON:
+                    case COMMAND_TYPE.INVALID:
+                        break;
+                    default:
+                        break;
+                    }
+                }
             });
         });
+        refreshPaneImage();
         searchStatus -= calcelCount;
     }
 };
