@@ -409,6 +409,7 @@ const init = () => {
     archCount.value = '尚未計算';
     magicCount.value = '尚未計算';
     healCount.value = '尚未計算';
+    stepCount.value = '';
     // calculateCombo();
 };
 
