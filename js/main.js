@@ -182,7 +182,7 @@ const clickCommand = (gridRow, gridCol) => {
     }
 };
 
-const searchSameCommand = (row = 0, col = 0, mode = 'row', currentPane) => {
+const searchSameCommand = (row, col, mode, currentPane) => {
     const matches = [[row, col]];
     let currentRow = row; let
         currentCol = col;
