@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-param-reassign */
 const COMMAND_TYPE = {
     SWORD: 400,
     ARCH: 300,
