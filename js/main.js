@@ -324,8 +324,8 @@ const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
         currentPane = paneTidy(currentPane);
         if (combo > 0) {
             let newPane = `<h4>【STEP ${step}】→ ${combo} Combo</h4><div class="pane-wrapper">`;
-            Array(5).fill(0).forEach((_, row) => {
-                Array(6).fill(0).forEach((__, col) => {
+            for (let row = 0; row < 5; row += 1) {
+                for (let col = 0; col < 6; col += 1) {
                     let path = '';
                     switch (currentPane[row][col]) {
                     case COMMAND_TYPE.SWORD:
@@ -349,8 +349,8 @@ const calculateCombo = (currentPane = pane.map((r) => r.slice())) => {
                     newPane += `<div class="pane-grid">
                                     <img src="${path}" class="img-fluid">
                                 </div>`;
-                });
-            });
+                }
+            }
             newPane += '</div><br>';
             dropResult.innerHTML += newPane;
             step += 1;
@@ -363,7 +363,9 @@ const init = () => {
     refreshPane();
     refreshPaneImage();
     refreshSearchPane();
-    calculateCombo();
+    dropResult.innerHTML = '';
+    comboCount.value = '';
+    // calculateCombo();
 };
 
 init();
