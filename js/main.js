@@ -74,6 +74,25 @@ const changeEdit = (editCmd) => {
     }
 };
 
+const getCommandImagePath = (command) => {
+    switch (command) {
+    case COMMAND_TYPE.SWORD:
+        return './img/command-sword.png';
+    case COMMAND_TYPE.ARCH:
+        return './img/command-arch.png';
+    case COMMAND_TYPE.MAGIC:
+        return './img/command-magic.png';
+    case COMMAND_TYPE.HEAL:
+        return './img/command-heal.png';
+    case COMMAND_TYPE.INVALID:
+        return './img/command-invalid.png';
+    case COMMAND_TYPE.STONE:
+        return './img/command-stone.png';
+    default:
+        return './img/command-empty.png';
+    }
+};
+
 const refreshPane = () => {
     searchStatus = 0;
     Array(5).fill(0).forEach((_, row) => {
@@ -88,29 +107,7 @@ const refreshPaneImage = () => {
     let newPane = '';
     Array(5).fill(0).forEach((_, row) => {
         Array(6).fill(0).forEach((__, col) => {
-            let path = '';
-            switch (pane[row][col]) {
-            case COMMAND_TYPE.SWORD:
-                path = './img/command-sword.png';
-                break;
-            case COMMAND_TYPE.ARCH:
-                path = './img/command-arch.png';
-                break;
-            case COMMAND_TYPE.MAGIC:
-                path = './img/command-magic.png';
-                break;
-            case COMMAND_TYPE.HEAL:
-                path = './img/command-heal.png';
-                break;
-            case COMMAND_TYPE.INVALID:
-                path = './img/command-invalid.png';
-                break;
-            case COMMAND_TYPE.STONE:
-                path = './img/command-stone.png';
-                break;
-            default:
-                path = './img/command-empty.png';
-            }
+            const path = getCommandImagePath(pane[row][col]);
             newPane += `<div class="pane-grid
                             ${searchPane[row][col] > SEARCH_TYPE.START ? 'pane-grid-onselect' : ''}
                             ${searchPane[row][col] === SEARCH_TYPE.START ? 'pane-grid-onselect-start' : ''}"
@@ -401,29 +398,7 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
             `;
             for (let row = 0; row < 5; row += 1) {
                 for (let col = 0; col < 6; col += 1) {
-                    let path = '';
-                    switch (currentPane[row][col]) {
-                    case COMMAND_TYPE.SWORD:
-                        path = './img/command-sword.png';
-                        break;
-                    case COMMAND_TYPE.ARCH:
-                        path = './img/command-arch.png';
-                        break;
-                    case COMMAND_TYPE.MAGIC:
-                        path = './img/command-magic.png';
-                        break;
-                    case COMMAND_TYPE.HEAL:
-                        path = './img/command-heal.png';
-                        break;
-                    case COMMAND_TYPE.INVALID:
-                        path = './img/command-invalid.png';
-                        break;
-                    case COMMAND_TYPE.STONE:
-                        path = './img/command-stone.png';
-                        break;
-                    default:
-                        path = './img/command-empty.png';
-                    }
+                    const path = getCommandImagePath(currentPane[row][col]);
                     newPane += `<div class="pane-grid">
                                     <img src="${path}" class="img-fluid">
                                 </div>`;
