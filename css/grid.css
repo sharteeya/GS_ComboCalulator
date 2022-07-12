@@ -31,11 +31,24 @@
 }
 
 .pane-grid-onselect-start {
+    position: relative;
     border: 5px solid yellow;
 }
 
 .pane-grid-onselect {
+    position: relative;
     border: 5px solid white;
+}
+
+.command-number {
+    position: absolute;
+    top: 75%;
+    left: 75%;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: black 0em 0em 0.2em;
+    transform: translate(-50%, -50%);
 }
 
 @media (min-width: 768px) {

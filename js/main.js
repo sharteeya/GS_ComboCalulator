@@ -117,7 +117,8 @@ const refreshPaneImage = () => {
                             ${searchPane[row][col] === SEARCH_TYPE.START ? 'pane-grid-onselect-start' : ''}"
                             onClick="clickCommand(${row}, ${col});
                         ">
-                            <img src="${path}" class="img-fluid">
+                        <img src="${path}" class="img-fluid">
+                        ${searchPane[row][col] >= SEARCH_TYPE.START ? `<div class="command-number">${searchPane[row][col] - SEARCH_TYPE.START + 1}</div>` : ''}
                         </div>`;
         });
     });
