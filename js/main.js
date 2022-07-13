@@ -184,6 +184,16 @@ const updateSearchPane = (pos) => {
 
 const clickCommand = (row, col) => {
     if (tapMode === TAP_MODE.PLAYING) {
+        let isSelectable = false;
+        if (searchStep > 0 && searchPane[row][col] === SEARCH_TYPE.EMPTY) {
+            if (row > ROW_MIN_INDEX && searchPane[row - 1][col] === SEARCH_TYPE.START + searchStep - 1) isSelectable = true;
+            if (row < ROW_MAX_INDEX && searchPane[row + 1][col] === SEARCH_TYPE.START + searchStep - 1) isSelectable = true;
+            if (col > COL_MIN_INDEX && searchPane[row][col - 1] === SEARCH_TYPE.START + searchStep - 1) isSelectable = true;
+            if (col < COL_MAX_INDEX && searchPane[row][col + 1] === SEARCH_TYPE.START + searchStep - 1) isSelectable = true;
+            if (!isSelectable) {
+                return;
+            }
+        }
         switch (pane[row][col]) {
         case COMMAND_TYPE.SWORD:
             pane[row][col] = COMMAND_TYPE.ARCH;
