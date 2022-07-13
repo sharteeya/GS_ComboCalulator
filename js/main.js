@@ -222,9 +222,6 @@ const paneTidy = (currentPane) => {
     for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
         let colCommands = [newPane[4][col], newPane[3][col], newPane[2][col], newPane[1][col], newPane[0][col]];
         colCommands = colCommands.filter((cmd) => cmd !== COMMAND_TYPE.EMPTY);
-        while (colCommands.length > 0 && colCommands[0] === COMMAND_TYPE.STONE) {
-            colCommands.shift();
-        }
         if (colCommands.length < 5) {
             colCommands = colCommands.concat(Array(5 - colCommands.length).fill(0));
         }
@@ -352,6 +349,16 @@ const findCombo = (inputPane) => {
                     console.error('Error occur');
                 }
                 combo += 1;
+            }
+        }
+    }
+    for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
+        let currentRow = ROW_MAX_INDEX;
+        while (currentPane[currentRow][col] === COMMAND_TYPE.STONE) {
+            currentPane[currentRow][col] = COMMAND_TYPE.EMPTY;
+            currentRow -= 1;
+            if (currentRow < 0) {
+                break;
             }
         }
     }
