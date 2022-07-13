@@ -17,7 +17,18 @@
     <div class="container">
         <div class="row mt-3">
             <div class="col-12 col-md-6 left-bar">
-              <h4>選擇模式</h4>
+              <h4>
+                選擇模式
+                <button class="btn btn-sm btn-outline-secondary rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#mode-info" aria-expanded="false" aria-controls="mode-info">
+                    開關說明
+                </button>
+              </h4>
+                <div class="collapse mt-2 mb-2" id="mode-info">
+                    <div class="card card-body">
+                        模擬模式：和遊戲中一樣翻版<br>
+                        編輯模式：將該格換成下方的指令
+                    </div>
+                </div>
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onclick="changeMode(0)" checked>
                     <label class="btn btn-lg btn-outline-primary" for="btnradio1">模擬模式</label>
@@ -25,8 +36,21 @@
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="changeMode(100)">
                     <label class="btn btn-lg btn-outline-primary" for="btnradio2">編輯模式</label>
                 </div>
+
             <hr>
-              <h4>編輯面板</h4>
+              <h4>
+                編輯面板
+                <button class="btn btn-sm btn-outline-secondary rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#edit-info" aria-expanded="false" aria-controls="edit-info">
+                    開關說明
+                </button>
+              </h4>
+                <div class="collapse mt-2 mb-2" id="edit-info">
+                    <div class="card card-body">
+                        點一下指令即可切換到該指令<br>
+                        僅會在編輯模式中使用<br>
+                        ※目前不支援中毒珠
+                    </div>
+                </div>
                 <div class="edit-wrapper">
                     <div class="edit-grid" id="edit-sword" onclick="changeEdit(400)">
                         <img src="img/command-sword.png" class="img-fluid cmd-unselec">
@@ -48,13 +72,25 @@
                     </div>
                 </div>
                 <hr>
-                <h4>計算操作</h4>
+                <h4>
+                    計算操作
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#opt-info" aria-expanded="false" aria-controls="opt-info">
+                        開關說明
+                    </button>
+                </h4>
+                <div class="collapse mt-2 mb-2" id="opt-info">
+                    <div class="card card-body">
+                        開始計算：計算指令消除數與 Combo 數<br>
+                        重置翻版：重置目前翻版過程<br>
+                        隨機面板：隨機產生新面板
+                    </div>
+                </div>
                 <button class="btn btn-lg btn-success" onclick="calculateCombo()">開始計算</button>
                 <button class="btn btn-lg btn-secondary" onclick="resetSearchPane(false)">重置翻版</button>
                 <button class="btn btn-lg btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#check-opt" aria-expanded="false" aria-controls="check-opt">
-                      隨機面板
+                    隨機面板
                 </button>
-                <div class="collapse mt-2" id="check-opt">
+                <div class="collapse mt-2 mb-2" id="check-opt">
                     <div class="card card-body">
                         <p>現有面板將被移除，確定嗎？</p>
                         <div class="row">
@@ -68,13 +104,25 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
-                <h4>指令面板</h4>
+            <div class="col-12 col-md-6 mt-3">
+                <h4>
+                    指令面板
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#pane-info" aria-expanded="false" aria-controls="pane-info">
+                        開關說明
+                    </button>
+                </h4>
+                <div class="collapse mt-2 mb-2" id="pane-info">
+                    <div class="card card-body">
+                        點擊指令可以進行翻版或編輯<br>
+                        和遊戲中一樣，只能翻上下左右的指令<br>
+                        完成後請按下「開始計算」
+                    </div>
+                </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">總移動格數</span>
                     <input type="text" class="form-control" id="stepCount" readonly>
                 </div>
-                <div class="pane-wrapper" id="pane">Loading</div>
+                <div class="pane-wrapper" id="pane">面板讀取中</div>
             </div>
         </div>
         <hr>
