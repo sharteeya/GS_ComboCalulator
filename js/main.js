@@ -128,16 +128,39 @@ const refreshPaneImage = () => {
     paneDisplay.innerHTML = newPaneHTML;
 };
 
-const resetSearchPane = () => {
+const resetSearchPane = (isInit = false) => {
+    searchStep = 0;
     for (let row = ROW_MIN_INDEX; row <= ROW_MAX_INDEX; row += 1) {
         for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
             if (pane[row][col] === COMMAND_TYPE.STONE) {
                 searchPane[row][col] = SEARCH_TYPE.UNSELECTABLE;
-            } else {
+            } else if (searchPane[row][col] >= SEARCH_TYPE.START) {
                 searchPane[row][col] = SEARCH_TYPE.EMPTY;
+                if (!isInit) {
+                    switch (pane[row][col]) {
+                    case COMMAND_TYPE.SWORD:
+                        pane[row][col] = COMMAND_TYPE.ARCH;
+                        break;
+                    case COMMAND_TYPE.ARCH:
+                        pane[row][col] = COMMAND_TYPE.SWORD;
+                        break;
+                    case COMMAND_TYPE.MAGIC:
+                        pane[row][col] = COMMAND_TYPE.HEAL;
+                        break;
+                    case COMMAND_TYPE.HEAL:
+                        pane[row][col] = COMMAND_TYPE.MAGIC;
+                        break;
+                    case COMMAND_TYPE.STONE:
+                    case COMMAND_TYPE.POISON:
+                    case COMMAND_TYPE.INVALID:
+                    default:
+                        break;
+                    }
+                }
             }
         }
     }
+    refreshPaneImage();
 };
 
 const updateSearchPane = (pos) => {
@@ -420,7 +443,7 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
 const init = () => {
     refreshPane();
     refreshPaneImage();
-    resetSearchPane();
+    resetSearchPane(true);
     dropResult.innerHTML = '';
     comboCount.value = '尚未計算';
     swordCount.value = '尚未計算';
