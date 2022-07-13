@@ -15,18 +15,19 @@
         </div>
     </nav>
     <div class="container">
-        <div class="row mt-3 mb-3">
-            <div class="col-12 col-md-6 left-bar mb-4">
+        <div class="row mt-3">
+            <div class="col-12 col-md-6 left-bar">
               <h4>選擇模式</h4>
-                <div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onclick="changeMode(0)" checked>
-                    <label class="btn btn-outline-primary" for="btnradio1">模擬模式</label>
+                    <label class="btn btn-lg btn-outline-primary" for="btnradio1">模擬模式</label>
                 
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="changeMode(100)">
-                    <label class="btn btn-outline-primary" for="btnradio2">編輯模式</label>
+                    <label class="btn btn-lg btn-outline-primary" for="btnradio2">編輯模式</label>
                 </div>
+            <hr>
               <h4>編輯面板</h4>
-                <div class="edit-wrapper mb-4">
+                <div class="edit-wrapper">
                     <div class="edit-grid" id="edit-sword" onclick="changeEdit(400)">
                         <img src="img/command-sword.png" class="img-fluid cmd-unselec">
                     </div>
@@ -46,6 +47,8 @@
                         <img src="img/command-stone.png" class="img-fluid">
                     </div>
                 </div>
+                <hr>
+                <h4>計算操作</h4>
                 <button class="btn btn-lg btn-success" onclick="calculateCombo()">開始計算</button>
                 <button class="btn btn-lg btn-secondary" onclick="resetSearchPane(false)">重置翻版</button>
                 <button class="btn btn-lg btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#check-opt" aria-expanded="false" aria-controls="check-opt">
@@ -66,6 +69,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6">
+                <h4>指令面板</h4>
                 <div class="input-group mb-3">
                     <span class="input-group-text">總移動格數</span>
                     <input type="text" class="form-control" id="stepCount" readonly>
