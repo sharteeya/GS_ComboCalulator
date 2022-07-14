@@ -59,24 +59,31 @@ const changeEdit = (editCmd) => {
     editCommand = editCmd;
     editBtns.forEach((btn) => {
         btn.classList.add('cmd-unselect');
+        btn.classList.remove('cmd-select');
     });
     switch (editCmd) {
     case COMMAND_TYPE.SWORD:
+        editSword.classList.add('cmd-select');
         editSword.classList.remove('cmd-unselect');
         break;
     case COMMAND_TYPE.ARCH:
+        editArch.classList.add('cmd-select');
         editArch.classList.remove('cmd-unselect');
         break;
     case COMMAND_TYPE.MAGIC:
+        editMagic.classList.add('cmd-select');
         editMagic.classList.remove('cmd-unselect');
         break;
     case COMMAND_TYPE.HEAL:
+        editHeal.classList.add('cmd-select');
         editHeal.classList.remove('cmd-unselect');
         break;
     case COMMAND_TYPE.INVALID:
+        editInvalid.classList.add('cmd-select');
         editInvalid.classList.remove('cmd-unselect');
         break;
     case COMMAND_TYPE.STONE:
+        editStone.classList.add('cmd-select');
         editStone.classList.remove('cmd-unselect');
         break;
     default:
@@ -444,6 +451,7 @@ const init = () => {
     refreshPane();
     refreshPaneImage();
     resetSearchPane(true);
+    changeEdit(400);
     dropResult.innerHTML = '';
     comboCount.value = '尚未計算';
     swordCount.value = '尚未計算';
