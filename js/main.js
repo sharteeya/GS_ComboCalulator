@@ -50,6 +50,8 @@ const editBtns = [editSword, editArch, editMagic, editHeal, editInvalid, editSto
 
 const pane = new Array(ROW_LENGTH).fill(0).map(() => new Array(COL_LENGTH).fill(0));
 const searchPane = new Array(ROW_LENGTH).fill(0).map(() => new Array(COL_LENGTH).fill(0));
+const groupPane = new Array(ROW_LENGTH).fill(0).map(() => new Array(COL_LENGTH).fill(0));
+let groupCount = 1;
 
 const changeMode = (mode) => {
     tapMode = mode;
@@ -112,10 +114,12 @@ const getCommandImagePath = (command) => {
 
 const refreshPane = () => {
     searchStep = 0;
+    groupCount = 1;
     for (let row = ROW_MIN_INDEX; row <= ROW_MAX_INDEX; row += 1) {
         for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
             pane[row][col] = (Math.floor(Math.random() * 4) + 1) * 100;
             searchPane[row][col] = SEARCH_TYPE.EMPTY;
+            groupPane[row][col] = 0;
         }
     }
 };
@@ -137,8 +141,10 @@ const refreshPaneImage = () => {
 
 const resetSearchPane = (isInit = false) => {
     searchStep = 0;
+    groupCount = 1;
     for (let row = ROW_MIN_INDEX; row <= ROW_MAX_INDEX; row += 1) {
         for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
+            groupPane[row][col] = 0;
             if (pane[row][col] === COMMAND_TYPE.STONE) {
                 searchPane[row][col] = SEARCH_TYPE.UNSELECTABLE;
             } else if (searchPane[row][col] >= SEARCH_TYPE.START) {
@@ -209,6 +215,21 @@ const updateSearchPane = (pos) => {
         }
         refreshPaneImage();
         searchStep -= calcelCount;
+    }
+};
+
+const addGroup = (groupPos) => {
+    groupPos.forEach((pos) => {
+        groupPane[pos.row][pos.col] = groupCount;
+    });
+    groupCount += 1;
+};
+
+const resetGroup = () => {
+    for (let row = ROW_MIN_INDEX; row <= ROW_MAX_INDEX; row += 1) {
+        for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
+            groupPane[row][col] = 0;
+        }
     }
 };
 
@@ -331,6 +352,7 @@ const findCombo = (inputPane) => {
                 && currentPane[row][col] > COMMAND_TYPE.EMPTY) {
                 const result = findSameCommand(row, col, currentPane);
                 let count = 0;
+                addGroup(result.matches);
                 result.matches.forEach((pos) => {
                     if (currentPane[pos.row][pos.col] === result.targetCommand) {
                         count += 1;
@@ -365,6 +387,7 @@ const findCombo = (inputPane) => {
                 && currentPane[row][col] > COMMAND_TYPE.EMPTY) {
                 const result = findSameCommand(row, col, currentPane);
                 let count = 0;
+                addGroup(result.matches);
                 result.matches.forEach((pos) => {
                     if (currentPane[pos.row][pos.col] === result.targetCommand) {
                         count += 1;
@@ -415,6 +438,8 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
     };
 
     dropResult.innerHTML = '';
+    resetGroup();
+    groupCount = 1;
     do {
         const result = findCombo(currentPane);
         combo = result.combo;
@@ -422,10 +447,23 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
             commandCount[key] += result.commandCount[key];
         });
         totalCombo += combo;
-        currentPane = paneTidy(result.currentPane);
+
         if (combo > 0) {
             let newPaneHTML = `
             <h4>【STEP ${step}】→ ${combo} Combo</h4>
+            <p> 消除前的版面如下</p>
+            <div class="pane-wrapper">`;
+            for (let row = ROW_MIN_INDEX; row <= ROW_MAX_INDEX; row += 1) {
+                for (let col = COL_MIN_INDEX; col <= COL_MAX_INDEX; col += 1) {
+                    newPaneHTML += `<div class="pane-grid pane-grid-group-count">
+                    <img src="${getCommandImagePath(currentPane[row][col])}" class="img-fluid ${groupPane[row][col] > 0 ? 'cmd-unselect' : ''}">
+                    ${groupPane[row][col] > 0 ? `<div class="command-number-lg">${groupPane[row][col]}</div>` : ''}
+                    </div>`;
+                }
+            }
+            newPaneHTML += '</div><br>';
+            currentPane = paneTidy(result.currentPane);
+            newPaneHTML += `
             <p> 消除後的版面如下</p>
             <div class="pane-wrapper">`;
 
@@ -434,10 +472,11 @@ const calculateCombo = (inputPane = pane.map((r) => r.slice())) => {
                     newPaneHTML += `<div class="pane-grid"><img src="${getCommandImagePath(currentPane[row][col])}" class="img-fluid"></div>`;
                 }
             }
-            newPaneHTML += '</div><br>';
+            newPaneHTML += '</div><hr>';
             dropResult.innerHTML += newPaneHTML;
             step += 1;
         }
+        resetGroup();
     } while (combo > 0);
 
     comboCount.value = totalCombo;
@@ -452,6 +491,8 @@ const init = () => {
     refreshPaneImage();
     resetSearchPane(true);
     changeEdit(400);
+    resetGroup();
+    groupCount = 1;
     dropResult.innerHTML = '';
     comboCount.value = '尚未計算';
     swordCount.value = '尚未計算';
